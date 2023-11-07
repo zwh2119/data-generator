@@ -20,7 +20,6 @@ class Task(ABC):
         self.metadata = metadata
         self.task_dag = task_dag
         self.execute_data = {}
-        self.cur_step = -1
 
     @abstractmethod
     def serialize(self) -> dict:

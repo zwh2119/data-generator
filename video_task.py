@@ -17,4 +17,4 @@ class VideoTask(Task):
     def serialize(self) -> dict:
         return {'data': self.data, 'seq_id': self.seq_id, 'source_id': self.source_id,
                 'priority': self.priority, 'metadata': self.metadata, 'task_dag': self.task_dag,
-                'execute_data': self.execute_data, 'cur_step': self.cur_step}
+                'execute_data': self.execute_data}

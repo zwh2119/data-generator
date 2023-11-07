@@ -21,4 +21,6 @@ requests.get()
 
 # 一片数据的数据结构
 # {数据流id, 数据片id, 数据形式（原视频or结果）,数据内容....}
+# {data flow id, task id, work dag, current step, frame resolution, frame rate, frame number, 
+# encoding, worker(ip:port)，priority, data form, data content}
 ```
