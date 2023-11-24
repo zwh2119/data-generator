@@ -1,3 +1,5 @@
+import json
+
 from generator import Generator
 import cv2
 import os
@@ -23,8 +25,6 @@ class VideoGenerator(Generator):
     #        currently some frames from video source
     #        will be discarded in the process of frame compress.
     def run(self):
-        time.sleep(1)
-        print('start')
         cur_id = 0
         cnt = 0
 
@@ -43,11 +43,8 @@ class VideoGenerator(Generator):
         skipping_frame_interval = 1
 
         temp_frame_buffer = []
-        print('?')
         while True:
-            print('here1')
             ret, frame = self.data_source_capture.read()
-            print('here2')
 
             while not ret:
                 print(f'no video signal of source {self.generator_id}')
@@ -64,8 +61,7 @@ class VideoGenerator(Generator):
                 continue
             else:
                 # compress all the frames in the buffer into a short video, send it as a task, and empty the buffer
-                compressed_video = self.compress_frames(temp_frame_buffer, frame_fourcc)
-                base64_frame = base64.b64encode(compressed_video)
+                compressed_video_pth = self.compress_frames(temp_frame_buffer, frame_fourcc)
 
                 # TODO: post task to local controller
                 """
@@ -82,7 +78,7 @@ class VideoGenerator(Generator):
                     execute_data:{service_time, transmit_time, acc}
                 6.cur_flow_index
                 7.scenario_data:{obj_num, obj_size, stable}
-                8.content_data (frame/middle_result/result)
+                8.content_data (middle_result/result)
                 9.tmp_data:{} (middle_record)
                 
                 """
@@ -95,14 +91,18 @@ class VideoGenerator(Generator):
                 data['pipeline_flow'] = self.task_pipeline
                 data['tmp_data'] = {}
                 data['cur_flow_index'] = 0
-                data['content_data'] = base64_frame
+                data['content_data'] = None
                 data['scenario_data'] = {}
+                data['content_type'] = 'file'
 
-                data['tmp_data'],_ = record_time(data['tmp_data'], f'transmit_time_{data["cur_flow_index"]}')
+                data['tmp_data'], _ = record_time(data['tmp_data'], f'transmit_time_{data["cur_flow_index"]}')
 
-                requests.post(data['pipeline_flow'][data['cur_flow_index']]['execute_address'], json=data)
+                requests.post(data['pipeline_flow'][data['cur_flow_index']]['execute_address'],
+                              data={'data': json.dumps(data)},
+                              files={'file': (f'tmp_{self.generator_id}.mp4', open(compressed_video_pth, 'rb'), 'video/mp4')})
                 cur_id += 1
                 temp_frame_buffer = []
+                os.remove(compressed_video_pth)
 
     # TODO: optimize frames compress efficiency
     def compress_frames(self, frames, fourcc):
@@ -113,19 +113,6 @@ class VideoGenerator(Generator):
         for frame in frames:
             out.write(frame)
         out.release()
-        with open(buffer_path, 'rb') as f:
-            compressed_video = f.read()
-        # delete the temporary file
-        os.remove(buffer_path)
-        return compressed_video
 
-    def generate_blank_data(self):
-        data_structure = {}
-        data_structure['source_id'] = -1
-        data_structure['task_id'] = -1
-        data_structure['priority'] = -1
-        data_structure['metadata'] = {}
-        data_structure['pipeline_flow'] = []
-        data_structure['cur_flow_index'] = 0
+        return buffer_path
 
-        return data_structure
