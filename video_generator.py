@@ -99,7 +99,9 @@ class VideoGenerator(Generator):
 
                 requests.post(data['pipeline_flow'][data['cur_flow_index']]['execute_address'],
                               data={'data': json.dumps(data)},
-                              files={'file': (f'tmp_{self.generator_id}.mp4', open(compressed_video_pth, 'rb'), 'video/mp4')})
+                              files={'file': (f'tmp_{self.generator_id}.mp4',
+                                              open(compressed_video_pth, 'rb'),
+                                              'video/mp4')})
                 cur_id += 1
                 temp_frame_buffer = []
                 os.remove(compressed_video_pth)
