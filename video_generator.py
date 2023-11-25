@@ -17,7 +17,6 @@ class VideoGenerator(Generator):
 
         self.data_source = data_source
         self.data_source_capture = cv2.VideoCapture(data_source)
-        print(f'source:{data_source}')
         self.schedule_address = schedule_address
         self.raw_meta_data = {'resolution_raw': resolution, 'fps_raw': fps}
 
@@ -40,30 +39,38 @@ class VideoGenerator(Generator):
         frame_resolution = '720p'
         frame_fourcc = 'h264'
         frames_per_task = 8
-        skipping_frame_interval = 1
+        skipping_frame_interval = 3
 
         temp_frame_buffer = []
         while True:
             ret, frame = self.data_source_capture.read()
 
+            # retry when no video signal
             while not ret:
                 print(f'no video signal of source {self.generator_id}')
                 time.sleep(1)
                 self.data_source_capture = cv2.VideoCapture(self.data_source)
                 ret, frame = self.data_source_capture.read()
+
             print(f'get a frame from source {self.generator_id}')
+
+            # adjust resolution
             frame = cv2.resize(frame, text2resolution(frame_resolution))
+
+            # adjust fps
             cnt += 1
-            if cnt % skipping_frame_interval != 0:
+            if cnt % skipping_frame_interval == 0:
                 continue
+
+            # put frame in buffer
             temp_frame_buffer.append(frame)
             if len(temp_frame_buffer) < frames_per_task:
                 continue
             else:
-                # compress all the frames in the buffer into a short video, send it as a task, and empty the buffer
+                # compress frames in the buffer into a short video
                 compressed_video_pth = self.compress_frames(temp_frame_buffer, frame_fourcc)
 
-                # TODO: post task to local controller
+
                 """
                 data structure
                 
@@ -95,18 +102,20 @@ class VideoGenerator(Generator):
                 data['scenario_data'] = {}
                 data['content_type'] = 'file'
 
+                # start record transmit time
                 data['tmp_data'], _ = record_time(data['tmp_data'], f'transmit_time_{data["cur_flow_index"]}')
 
+                # post task to local controller
                 requests.post(data['pipeline_flow'][data['cur_flow_index']]['execute_address'],
                               data={'data': json.dumps(data)},
                               files={'file': (f'tmp_{self.generator_id}.mp4',
                                               open(compressed_video_pth, 'rb'),
                                               'video/mp4')})
+
                 cur_id += 1
                 temp_frame_buffer = []
                 os.remove(compressed_video_pth)
 
-    # TODO: optimize frames compress efficiency
     def compress_frames(self, frames, fourcc):
         fourcc = cv2.VideoWriter_fourcc(*fourcc)
         height, width, _ = frames[0].shape
