@@ -37,7 +37,7 @@ class VideoGenerator(Generator):
         # skipping_frame_interval = tuned_parameters['skipping_frame_interval']
 
         frame_resolution = '720p'
-        frame_fourcc = 'h264'
+        frame_fourcc = 'mp4v'
         frames_per_task = 8
         skipping_frame_interval = 3
 
