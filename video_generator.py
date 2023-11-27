@@ -3,8 +3,6 @@ import json
 from generator import Generator
 import cv2
 import os
-import time
-import base64
 import requests
 
 from utils import *
@@ -28,17 +26,14 @@ class VideoGenerator(Generator):
         cnt = 0
 
         # TODO: complete details of requests to scheduler
-        # response = requests.get(self.schedule_address)
-        # tuned_parameters = response.json()
+        response = requests.get(self.schedule_address, json={})
+        tuned_parameters = response.json()['plan']
 
-        # frame_resolution = tuned_parameters['resolution']
-        # frame_fourcc = tuned_parameters['encoding']
-        # frames_per_task = tuned_parameters['frames_per_task']
-        # skipping_frame_interval = tuned_parameters['skipping_frame_interval']
+        frame_resolution = tuned_parameters['resolution']
+        frame_fourcc = tuned_parameters['encoding']
+        frames_per_task = tuned_parameters['frame_num']
+        fps = tuned_parameters['fps']
 
-        frame_resolution = '720p'
-        frame_fourcc = 'mp4v'
-        frames_per_task = 8
         skipping_frame_interval = 3
 
         temp_frame_buffer = []
