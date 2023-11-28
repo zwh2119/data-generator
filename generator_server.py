@@ -9,13 +9,7 @@ def main():
     scheduler_address = 'http://114.212.81.11:8140/schedule'
 
     for video in videos:
-        task_pipeline = [{'service_name': 'car_detection',
-                          'execute_address': video['execute'],
-                          'execute_data': {}},
-                         {'service_name': 'end',
-                          'execute_address': 'http://114.212.81.11:5713/distribute',
-                          'execute_data': {}}]
-        video_generator = VideoGenerator(video['url'], video['id'], 0, task_pipeline,
+        video_generator = VideoGenerator(video['url'], video['id'], 0, video['pipeline'],
                                          scheduler_address, video['resolution'], video['fps'])
         threading.Thread(target=video_generator.run).start()
 

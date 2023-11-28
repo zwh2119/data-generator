@@ -4,16 +4,19 @@ video:
     resolution: "1080p"
     fps: 25
     url: "rtsp://192.168.1.4/video0"
-    execute: "http://114.212.81.11:9002/submit_task"
+    pipeline:
+      - service_name: "car_detection"
   - id: 1
     description: "car"
     resolution: "1080p"
     fps: 30
     url: "rtsp://192.168.1.4/video1"
-    execute: "http://114.212.81.11:9002/submit_task"
+    pipeline:
+      - service_name: "car_detection"
   - id: 2
     description: "car"
     resolution: "1080p"
     fps: 30
     url: "rtsp://192.168.1.4/video2"
-    execute: "http://192.168.1.2:9002/submit_task"
+    pipeline:
+      - service_name: "car_detection"

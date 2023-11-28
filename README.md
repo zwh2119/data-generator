@@ -13,14 +13,20 @@
 
 ```
 
-## Related Interface
-```python
-# 向调度器请求超参数 包括{分辨率、帧率、编码方式、一片多少帧、优先级、发往微服务的ip}
-# (请求可以每隔若干片执行一次)
-requests.get()
+## Data Structure
 
-# 一片数据的数据结构
-# {数据流id, 数据片id, 数据形式（原视频or结果）,数据内容....}
-# {data flow id, task id, work dag, current step, frame resolution, frame rate, frame number, 
-# encoding, worker(ip:port)，priority, data form, data content}
+```
+                1.source_id
+                2.task_id
+                3.priority 
+                4.metadata:{resolution_raw, fps_raw, resolution, frame_number,
+                            skip_interval, encoding}
+                
+                5.pipeline_flow:[service1, service2,..., end]
+                    service:{service_name, execute_address, execute_data}
+                    execute_data:{service_time, transmit_time, acc}
+                6.cur_flow_index
+                7.scenario_data:{obj_num, obj_size, stable}
+                8.content_data (middle_result/result)
+                9.tmp_data:{} (middle_record)
 ```
