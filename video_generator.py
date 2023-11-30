@@ -103,7 +103,7 @@ class VideoGenerator(Generator):
                 1.source_id
                 2.task_id
                 3.priority 
-                4.metadata:{resolution_raw, fps_raw, resolution, frame_number,
+                4.meta_data:{resolution_raw, fps_raw, resolution, frame_number,
                             skip_interval, encoding}
                 
                 5.pipeline_flow:[service1, service2,..., end]
@@ -119,7 +119,7 @@ class VideoGenerator(Generator):
                              'fps': fps, 'frame_number': frames_per_task, 'encoding': frame_fourcc}
 
                 data = {'source_id': self.generator_id, 'task_id': cur_id, 'priority': priority,
-                        'metadata': meta_data, 'pipeline_flow': pipeline, 'tmp_data': {}, 'cur_flow_index': 0,
+                        'meta_data': meta_data, 'pipeline_flow': pipeline, 'tmp_data': {}, 'cur_flow_index': 0,
                         'content_data': None, 'scenario_data': {}}
 
                 # start record transmit time
