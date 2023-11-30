@@ -55,8 +55,6 @@ class VideoGenerator(Generator):
         tuned_parameters = response.json()['plan']
 
         frame_resolution = tuned_parameters['resolution']
-        frame_fourcc = tuned_parameters['encoding']
-        frames_per_task = tuned_parameters['frame_num']
         fps = tuned_parameters['fps']
         priority = tuned_parameters['priority']
         pipeline = tuned_parameters['pipeline']
@@ -146,7 +144,6 @@ class VideoGenerator(Generator):
 
                 frame_resolution = tuned_parameters['resolution']
                 frame_fourcc = tuned_parameters['encoding']
-                frames_per_task = tuned_parameters['frame_num']
                 fps = tuned_parameters['fps']
                 priority = tuned_parameters['priority']
                 pipeline = tuned_parameters['pipeline']
