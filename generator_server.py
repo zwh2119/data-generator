@@ -4,9 +4,11 @@ from video_generator import VideoGenerator
 
 scheduler_address = 'http://114.212.81.11:8140/schedule'
 
+video_config_file = 'video_config_classroom.yaml'
+
 
 def main():
-    video_config = yaml_utils.read_yaml('video_config.yaml')
+    video_config = yaml_utils.read_yaml(video_config_file)
     videos = video_config['video']
 
     for video in videos:
