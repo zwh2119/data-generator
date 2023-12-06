@@ -7,7 +7,7 @@ import requests
 
 from utils import *
 
-buffer_size = 16
+buffer_size = 8
 encoding = 'mp4v'
 controller_port = 9002
 
