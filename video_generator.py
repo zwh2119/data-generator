@@ -104,7 +104,7 @@ class VideoGenerator(Generator):
                 2.task_id
                 3.priority 
                 4.meta_data:{resolution_raw, fps_raw, resolution, frame_number,
-                            skip_interval, encoding}
+                            skip_interval, encoding， generate_ip}
                 
                 5.pipeline_flow:[service1, service2,..., end]
                     service:{service_name, execute_address, execute_data}
@@ -116,7 +116,8 @@ class VideoGenerator(Generator):
                 
                 """
                 meta_data = {'resolution_raw': resolution_raw, 'fps_raw': fps_raw, 'resolution': frame_resolution,
-                             'fps': fps, 'frame_number': frames_per_task, 'encoding': frame_fourcc}
+                             'fps': fps, 'frame_number': frames_per_task, 'encoding': frame_fourcc,
+                             'source_ip': self.local_ip}
 
                 data = {'source_id': self.generator_id, 'task_id': cur_id, 'priority': priority,
                         'meta_data': meta_data, 'pipeline_flow': pipeline, 'tmp_data': {}, 'cur_flow_index': 0,
