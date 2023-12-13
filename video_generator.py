@@ -3,10 +3,10 @@ import json
 from generator import Generator
 import cv2
 import os
-import requests
 
 from utils import *
 from log import LOGGER
+from client import http_request
 
 buffer_size = 8
 encoding = 'mp4v'
@@ -49,11 +49,12 @@ class VideoGenerator(Generator):
         priority = self.priority
         pipeline = self.task_pipeline
 
-        response = requests.get(self.schedule_address, json={'source_id': self.generator_id,
-                                                             'resolution_raw': resolution_raw,
-                                                             'fps_raw': fps_raw,
-                                                             'pipeline': pipeline})
-        tuned_parameters = response.json()['plan']
+        response = http_request(url=self.schedule_address, method='GET', json={'source_id': self.generator_id,
+                                                                               'resolution_raw': resolution_raw,
+                                                                               'fps_raw': fps_raw,
+                                                                               'pipeline': pipeline})
+
+        tuned_parameters = response['plan']
 
         frame_resolution = tuned_parameters['resolution']
         fps = tuned_parameters['fps']
@@ -128,21 +129,24 @@ class VideoGenerator(Generator):
                 data['tmp_data'], _ = record_time(data['tmp_data'], f'transmit_time_{data["cur_flow_index"]}')
 
                 # post task to local controller
-                requests.post(data['pipeline_flow'][data['cur_flow_index']]['execute_address'],
-                              data={'data': json.dumps(data)},
-                              files={'file': (f'tmp_{self.generator_id}.mp4',
-                                              open(compressed_video_pth, 'rb'),
-                                              'video/mp4')})
+                http_request(url=data['pipeline_flow'][data['cur_flow_index']]['execute_address'],
+                             method='POST',
+                             data={'data': json.dumps(data)},
+                             files={'file': (f'tmp_{self.generator_id}.mp4',
+                                             open(compressed_video_pth, 'rb'),
+                                             'video/mp4')}
+                             )
 
                 cur_id += 1
                 temp_frame_buffer = []
                 os.remove(compressed_video_pth)
 
-                response = requests.get(self.schedule_address, json={'source_id': self.generator_id,
-                                                                     'resolution_raw': resolution_raw,
-                                                                     'fps_raw': fps_raw,
-                                                                     'pipeline': pipeline})
-                tuned_parameters = response.json()['plan']
+                response = http_request(url=self.schedule_address, method='GET', json={'source_id': self.generator_id,
+                                                                                       'resolution_raw': resolution_raw,
+                                                                                       'fps_raw': fps_raw,
+                                                                                       'pipeline': pipeline})
+
+                tuned_parameters = response['plan']
 
                 frame_resolution = tuned_parameters['resolution']
                 frame_fourcc = tuned_parameters['encoding']
