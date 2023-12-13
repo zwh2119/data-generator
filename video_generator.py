@@ -6,6 +6,7 @@ import os
 import requests
 
 from utils import *
+from log import LOGGER
 
 buffer_size = 8
 encoding = 'mp4v'
@@ -68,12 +69,12 @@ class VideoGenerator(Generator):
 
             # retry when no video signal
             while not ret:
-                print(f'no video signal of source {self.generator_id}')
+                LOGGER.warning(f'no video signal of source {self.generator_id}')
                 time.sleep(1)
                 self.data_source_capture = cv2.VideoCapture(self.data_source)
                 ret, frame = self.data_source_capture.read()
 
-            print(f'get a frame from source {self.generator_id}')
+            LOGGER.debug(f'get a frame from source {self.generator_id}')
             resolution_raw = resolution2text((self.data_source_capture.get(cv2.CAP_PROP_FRAME_WIDTH),
                                               self.data_source_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
             fps_raw = self.data_source_capture.get(cv2.CAP_PROP_FPS)
