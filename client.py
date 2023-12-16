@@ -29,3 +29,5 @@ def http_request(url,
         LOGGER.warning(f'Timeout error in request {url}: {err}')
     except requests.exceptions.RequestException as err:
         LOGGER.warning(f'Error occurred in request {url}: {err}')
+    except Exception as err:
+        LOGGER.warning(f'Error occurred in request {url}: {err}')

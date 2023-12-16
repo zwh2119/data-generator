@@ -54,12 +54,13 @@ class VideoGenerator(Generator):
                                                                                'fps_raw': fps_raw,
                                                                                'pipeline': pipeline})
 
-        tuned_parameters = response['plan']
+        if response is not None:
+            tuned_parameters = response['plan']
 
-        frame_resolution = tuned_parameters['resolution']
-        fps = tuned_parameters['fps']
-        priority = tuned_parameters['priority']
-        pipeline = tuned_parameters['pipeline']
+            frame_resolution = tuned_parameters['resolution']
+            fps = tuned_parameters['fps']
+            priority = tuned_parameters['priority']
+            pipeline = tuned_parameters['pipeline']
 
         fps = min(fps, fps_raw)
         fps_mode, skip_frame_interval, remain_frame_interval = self.get_fps_adjust_mode(fps_raw, fps)
@@ -146,19 +147,19 @@ class VideoGenerator(Generator):
                                                                                        'fps_raw': fps_raw,
                                                                                        'pipeline': pipeline})
 
-                tuned_parameters = response['plan']
+                if response is not None:
+                    tuned_parameters = response['plan']
 
-                frame_resolution = tuned_parameters['resolution']
-                frame_fourcc = tuned_parameters['encoding']
-                fps = tuned_parameters['fps']
-                priority = tuned_parameters['priority']
-                pipeline = tuned_parameters['pipeline']
+                    frame_resolution = tuned_parameters['resolution']
+                    frame_fourcc = tuned_parameters['encoding']
+                    fps = tuned_parameters['fps']
+                    priority = tuned_parameters['priority']
+                    pipeline = tuned_parameters['pipeline']
 
                 fps = min(fps, fps_raw)
                 fps_mode, skip_frame_interval, remain_frame_interval = self.get_fps_adjust_mode(fps_raw, fps)
 
     def get_fps_adjust_mode(self, fps_raw, fps):
-        fps_mode = None
         skip_frame_interval = 0
         remain_frame_interval = 0
         if fps == fps_raw:
