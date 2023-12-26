@@ -6,6 +6,7 @@ video:
     url: "rtsp://192.168.1.4/video0"
     pipeline:
       - service_name: "car_detection"
+        service_port: 9001
   - id: 1
     description: "car"
     resolution: "1080p"
@@ -13,6 +14,7 @@ video:
     url: "rtsp://192.168.1.4/video1"
     pipeline:
       - service_name: "car_detection"
+        service_port: 9001
   - id: 2
     description: "car"
     resolution: "1080p"
@@ -20,3 +22,4 @@ video:
     url: "rtsp://192.168.1.4/video2"
     pipeline:
       - service_name: "car_detection"
+        service_port: 9001
