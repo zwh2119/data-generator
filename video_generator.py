@@ -10,7 +10,7 @@ from client import http_request
 
 buffer_size = 8
 encoding = 'mp4v'
-controller_port = 9002
+controller_port = 9200
 
 
 class VideoGenerator(Generator):
