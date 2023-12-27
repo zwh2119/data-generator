@@ -2,3 +2,4 @@ opencv-python
 pyyaml
 python-multipart
 colorlog
+requests
