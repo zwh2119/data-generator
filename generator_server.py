@@ -4,8 +4,8 @@ from video_generator import VideoGenerator
 from utils import *
 
 scheduler_ip = '114.212.81.11'
-video_config_file = 'video_config.yaml'
 
+video_config_file = 'video_config.yaml'
 scheduler_port = 9400
 scheduler_path = 'schedule'
 
