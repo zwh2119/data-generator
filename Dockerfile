@@ -20,6 +20,8 @@ RUN apt-get update \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install numpy
+
 ARG OPENCV_VERSION="4.4.0.44"
 ARG SYSTEM_CORES="8"
 RUN cp /usr/bin/make /usr/bin/make.bak && \
