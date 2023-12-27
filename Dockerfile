@@ -18,7 +18,7 @@ RUN apt-get update \
         libtiff-dev \
         libavformat-dev \
         libpq-dev \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG OPENCV_VERSION="4.4.0.44"
 ARG SYSTEM_CORES="8"
