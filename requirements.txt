@@ -2,4 +2,4 @@ pyyaml
 python-multipart
 colorlog
 requests
-opencv-python
+opencv-python-headless
