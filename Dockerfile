@@ -3,7 +3,7 @@ MAINTAINER Wenhui Zhou
 
 RUN pip install --upgrade pip setuptools wheel
 
-RUN apt-get update && apt-get install libopencv-dev python3-opencv
+RUN apt-get update && apt-get install -y libopencv-dev python3-opencv
 
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
