@@ -3,12 +3,22 @@ MAINTAINER Wenhui Zhou
 
 RUN pip install --upgrade pip setuptools wheel
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libopencv-dev \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    libjpeg-dev \
+    libtiff5-dev \
+    libjasper-dev \
+    libpng-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev \
+    libgtk-3-dev \
+    libatlas-base-dev \
+    gfortran \
+    python3-opencv
 
-RUN pip install --no-cache-dir numpy opencv-python-headless
 
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
