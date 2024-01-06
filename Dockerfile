@@ -21,7 +21,7 @@ RUN pip install --upgrade pip setuptools wheel
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-# TODO: video_config.yaml will be removed in later version
-COPY generator.py generator_server.py log.py client.py  video_generator.py yaml_utils.py utils.py video_config.yaml ./
+WORKDIR /app
+COPY generator.py generator_server.py log.py client.py  video_generator.py yaml_utils.py utils.py video_config.yaml /app/
 
 CMD ["python3", "generator_server.py"]
