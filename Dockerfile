@@ -1,3 +1,5 @@
+ARG dir=generator
+
 FROM gocv/opencv:latest
 
 MAINTAINER Wenhui Zhou
@@ -22,6 +24,6 @@ COPY ./requirements.txt ./
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 WORKDIR /app
-COPY generator.py generator_server.py log.py client.py  video_generator.py yaml_utils.py utils.py video_config.yaml /app/
+COPY ${dir}/generator.py ${dir}/generator_server.py ${dir}/log.py ${dir}/client.py  ${dir}/video_generator.py ${dir}/yaml_utils.py ${dir}/utils.py ${dir}/video_config.yaml /app/
 
 CMD ["python3", "generator_server.py"]
