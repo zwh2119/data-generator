@@ -1,6 +1,5 @@
 import json
 
-from generator import Generator
 import cv2
 import os
 
