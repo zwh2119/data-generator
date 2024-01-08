@@ -7,23 +7,28 @@ import os
 from utils import *
 from log import LOGGER
 from client import http_request
-
-buffer_size = 8
-encoding = 'mp4v'
-controller_port = 9200
+from config import Context
 
 
-class VideoGenerator(Generator):
+class VideoGenerator:
     def __init__(self, data_source: str, generator_id: int, priority: int,
-                 task_pipeline: list, schedule_address: str, resolution: str, fps: int):
-        super().__init__(data_source, generator_id, priority, task_pipeline)
+                 task_pipeline: list, schedule_address: str, controller_port: str,
+                 resolution: str, fps: int):
 
         self.data_source = data_source
         self.data_source_capture = cv2.VideoCapture(data_source)
         self.schedule_address = schedule_address
         self.raw_meta_data = {'resolution_raw': resolution, 'fps_raw': fps}
+        self.data_source = data_source
+        self.generator_id = generator_id
+        self.priority = priority
+        self.task_pipeline = task_pipeline
+        self.task_pipeline.append({'service_name': 'end', 'execute_address': '', 'execute_data': {}})
 
-        self.local_ip = get_host_ip()
+        self.buffer_size = 8
+        self.encoding = 'mp4v'
+
+        self.local_ip = get_nodes_info()[Context.get_parameters('NODE_NAME')]
 
         for task in self.task_pipeline:
             if task['service_name'] == 'end':
@@ -43,8 +48,8 @@ class VideoGenerator(Generator):
 
         # default parameters
         frame_resolution = self.raw_meta_data['resolution_raw']
-        frame_fourcc = encoding
-        frames_per_task = buffer_size
+        frame_fourcc = self.encoding
+        frames_per_task = self.buffer_size
         fps = self.raw_meta_data['fps_raw']
         priority = self.priority
         pipeline = self.task_pipeline
